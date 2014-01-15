@@ -1,0 +1,41 @@
+Name: RM.Localization
+AntiForgery: enabled
+Author: Maxim Rich
+Website: http://www.richmaxim.com
+Version: 1.1.0
+OrchardVersion: 1.7
+Description: Provide enchancements of default Orchard multilanguage support
+Dependencies: Orchard.Localization, Orchard.Alias, Orchard.Tags, Orchard.Search
+Category: Localization
+FeatureName: RM Localization
+Features:
+    RM.Localization.BrowserCultureSelector:
+        Name: RM Browser culture selector
+        Description: Select current language as default user's browser language
+        Category: Localization
+        Dependencies: Orchard.Localization, RM.Localization
+    RM.Localization.CookieCultureSelector:
+        Name: RM Cookie culture selector
+        Description: Select current language from cookie. Use Language Picker Widget to change current language
+        Category: Localization
+        Dependencies: Orchard.Localization, RM.Localization
+    RM.Localization.AdminCookieCultureSelector:
+        Name: RM Admin cookie culture selector
+        Description: Select current language from cookie in Admin menu
+        Category: Localization
+        Dependencies: Orchard.Localization, RM.Localization
+	RM.Localization.ShadowCultureManager:
+        Name: RM Shadow cultures
+        Description: Example, your default site culture is en-US and you have content localized as ru-RU. For visitors from Ukraine (uk-UA) or Belarus (be-BY) much preffereble would be to show content in ru-RU when en-US, because almost people know russian language. The same situation can happen with other cultures
+        Category: Localization
+        Dependencies: Orchard.Localization, RM.Localization
+	RM.Localization.LocalizedTags:
+        Name: RM Localized Tags
+        Description: Enables to show tags related only for content items in current culture. Also TagCloud widget available.
+        Category: Localization
+        Dependencies: Orchard.Localization, RM.Localization, Orchard.Tags
+	RM.Localization.LocalizedMenuFilter:
+	    Name: RM Localized Menu Filter
+        Description: Override default Orchard behaviour to always show menu items without specific culture. They will be shown only when default site culture is selected as current.
+        Category: Localization
+        Dependencies: Orchard.Localization, RM.Localization

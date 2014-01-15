@@ -1,0 +1,16 @@
+<Placement>
+  <Place Parts_Localization_ContentTranslations_Edit="-"/>
+  <Match DisplayType="SummaryAdmin">
+    <Place Parts_Localization_ContentTranslations_SummaryAdmin="-"/>
+  </Match>
+
+  <Place Parts_RMLocalization_ContentTranslations_Edit="Content:0"/>
+  <Match DisplayType="SummaryAdmin">
+    <Place Parts_RMLocalization_ContentTranslations_SummaryAdmin="Content:5"/>
+  </Match>
+
+  <Place Parts_CookieCulturePicker="Content:1.1"/>
+  <Place Parts_LocalizedTagCloud="Content:1.1"/>
+  <Place Parts_ShadowCulture_Settings="Content:1"/>
+  <Place Parts_CookieCulturePicker_Edit="Content:10"/>
+</Placement>

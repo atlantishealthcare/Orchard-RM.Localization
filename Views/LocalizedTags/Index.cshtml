@@ -1,0 +1,26 @@
+﻿@model RM.Localization.ViewModels.LocalizedTagsIndexViewModel
+
+
+@{
+    var test = Url.Action("NotTranslated", "LocalizedHome", new { Area = "RM.Localization", Culture = "ru-RU", Id = 35 });
+    var test2 = Html.ActionLink("Test", "NotTranslated", "LocalizedHome", new { Area = "RM.Localization", Culture = "ru-RU", Id = 35 }, null);
+}
+
+
+<article class="localized-tags">
+    <header>
+        <h2 class="page-title">@Html.TitleForPage(T("Tags").ToString())</h2>
+    </header>
+    @if (Model.Tags.Any()) {
+    @Html.UnorderedList(
+    Model.Tags,
+    (t, i) => Html.ActionLink(
+        string.Format("{0}({1})", t.TagName, t.Count),
+        "Search",
+        new { tagName = t.TagName },
+        new { @class = string.Format("tagWeight-{0}", t.Bucket) }
+        ), "localized-tags-cloud")
+    } else {
+        <p class="box info">@T("Here are no tags to show.")</p>
+    }
+</article>

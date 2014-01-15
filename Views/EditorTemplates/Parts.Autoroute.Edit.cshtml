@@ -1,0 +1,69 @@
+﻿@model Orchard.Autoroute.ViewModels.AutoroutePartEditViewModel
+@using Orchard.Autoroute
+@using Orchard.Utility.Extensions;
+@using Orchard.Environment.Configuration
+
+@if(Model.Settings.DefaultPatternIndex == -1) {
+    <div class="message message-Error">@T("The current Content Type does not have a default Autoroute Pattern. Please edit the settings first.")</div>
+    return;
+}
+
+@{
+    var defaultPattern = Model.Settings.Patterns[Model.Settings.DefaultPatternIndex];
+    var urlPrefix = WorkContext.Resolve<ShellSettings>().RequestUrlPrefix;
+    if (!String.IsNullOrWhiteSpace(urlPrefix)) {
+        urlPrefix += "/";
+    }
+}
+
+<fieldset class="permalink">
+    <label>@T("Permalink")</label>
+    @if (Model.Settings.AllowCustomPattern) {
+        <span>@ViewContext.RequestContext.HttpContext.Request.ToApplicationRootUrlString()/@urlPrefix</span>
+        <span>@Html.TextBoxFor(m => m.CurrentUrl, new {@class = "text", id = "Autoroute_Localized_CurrentUrl"})</span>
+        @Html.Hidden("PromoteToHomePage", false);
+    }
+    else {
+        <span>@ViewContext.RequestContext.HttpContext.Request.ToApplicationRootUrlString()/@urlPrefix</span>
+    }
+
+    <span class="hint">@T("Save the current item and leave the input empty to have it automatically generated using the pattern {0} e.g., {1}", defaultPattern.Name, defaultPattern.Description)</span>
+</fieldset>
+@using (Script.Foot()) {
+<script type="text/javascript">
+//<![CDATA[
+    (function ($) {
+        // grab the slug input
+        var slug = $("#Autoroute_Localized_CurrentUrl");
+        if (slug) {
+            // grab the current culture
+            var culture = $("#SelectedCulture");
+            if (culture.length > 0) {
+                var defaultCulture = slug.val().match(/^([a-z]{2}-[a-z]{2}|[a-z]{2}){1}/i);//culture.val().toLowerCase();
+                if (defaultCulture == null) defaultCulture = "";
+                if (defaultCulture.length > 0) defaultCulture = defaultCulture[0];
+                var currentCulture = defaultCulture;
+                // when the culture is changed update the slug
+                culture.change(function () {
+                    var slugValue = slug.val();
+                    var newCulture = $(this).val().toLowerCase();
+                    newCulture = newCulture ? newCulture : defaultCulture;
+                    if (slugValue && slugValue.match("^" + currentCulture)) {
+                        slug.val(slugValue.replace(new RegExp("^" + currentCulture, "i"), newCulture));
+                    }
+                    else
+                    {
+                        if (slugValue.match(/^\//)) {
+                            slug.val(newCulture + slugValue);
+                        } else {
+                            slug.val(slugValue ? newCulture + "/" + slugValue : newCulture);
+                        }
+                    }
+                    currentCulture = newCulture;
+                });
+            }
+        }
+    })(jQuery);
+//]]>
+</script>
+}

@@ -1,0 +1,18 @@
+﻿@model Orchard.Tags.ViewModels.TagsSearchViewModel
+@{ 
+    Html.AddTitleParts(T("Tags").ToString()); 
+    Html.AddTitleParts(T("Contents tagged with {0}", Model.TagName).ToString());
+    Model.List.Classes.Add("tagged-content-items");
+    Model.List.Classes.Add("content-items");
+}
+<article class="localized-tagged-content-items">
+    <header>
+        <h2 class="page-title">@T("Contents tagged with <span>{0}</span>", Model.TagName)</h2>
+    </header>
+    @if (Model.Pager.TotalItemCount > 0)  {
+    @Display(Model.List)
+    @Display(Model.Pager)
+    } else {
+        <p class="box info">@T("Here is no tagged content found.")</p>
+    }
+</article>

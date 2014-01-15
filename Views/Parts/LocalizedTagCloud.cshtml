@@ -1,0 +1,16 @@
+﻿@model object
+@{ var tags = (Model as dynamic).Tags as IList<RM.Localization.Models.LocalizedTag>; }
+@if (tags != null && tags.Any())
+{
+    @Html.UnorderedList(
+    tags,
+    (t, i) => Html.ActionLink(
+        string.Format("{0}({1})", t.TagName, t.Count),
+        "Search",
+        "LocalizedTags",
+        new { area = "RM.Localization", tagName = t.TagName },
+        new { @class = string.Format("widget-tagWeight-{0}", t.Bucket) }
+        ), "widget-localized-tags-cloud")
+    } else {
+        <p class="box info">@T("Here are no tags to show.")</p>
+}

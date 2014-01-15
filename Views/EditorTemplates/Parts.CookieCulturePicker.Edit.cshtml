@@ -1,0 +1,10 @@
+﻿@model RM.Localization.Models.CookieCulturePickerPart
+@using Orchard.Utility.Extensions;
+
+<div>
+    @Html.LabelFor(m => m.Style, T("Widget Style"))
+    @Html.DropDownListFor(m=>m.Style, new SelectList(RM.Localization.Drivers.CookieCulturePickerDriver.Styles, Model.Style))
+    @Html.ValidationMessage("Widget Style", "*")
+    <span class="hint">@T("Select desired widget style")</span>
+    <br />
+</div>
