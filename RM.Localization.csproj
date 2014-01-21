@@ -92,6 +92,21 @@
     <Compile Include="Services\ICookieCultureService.cs" />
     <Compile Include="ViewModels\CookieCultureItemViewModel.cs" />
     <Compile Include="ViewModels\LocalizedTagsIndexViewModel.cs" />
+    <Content Include="Module.txt" />
+    <Content Include="Web.config" />
+    <Content Include="Placement.info" />
+    <Content Include="Views\EditorTemplates\Parts.RMLocalization.ContentTranslations.Edit.cshtml" />
+    <Content Include="Views\EditorTemplates\Parts.Autoroute.Edit.cshtml" />
+    <Content Include="Views\EditorTemplates\Parts.CookieCulturePicker.Edit.cshtml" />
+    <Content Include="Views\EditorTemplates\Parts.ShadowCulture.Settings.cshtml" />
+    <Content Include="Views\NotTranslated.cshtml" />
+    <Content Include="Views\Parts\InlineListCookieCulturePicker.cshtml" />
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\LocalizedTags\Index.cshtml" />
+    <Content Include="Views\LocalizedTags\Search.cshtml" />
+    <Content Include="Views\Parts\LocalizedTagCloud.cshtml" />
+    <Content Include="Views\Parts\RMLocalization.ContentTranslations.SummaryAdmin.cshtml" />
+    <Content Include="Views\Parts\DropdownCookieCulturePicker.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -122,28 +137,6 @@
       <Project>{6f759635-13d7-4e94-bcc9-80445d63f117}</Project>
       <Name>Orchard.Tokens</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Module.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Web.config" />
-  </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
-    <Content Include="Placement.info" />
-    <Content Include="Views\EditorTemplates\Parts.RMLocalization.ContentTranslations.Edit.cshtml" />
-    <Content Include="Views\EditorTemplates\Parts.Autoroute.Edit.cshtml" />
-    <Content Include="Views\EditorTemplates\Parts.CookieCulturePicker.Edit.cshtml" />
-    <Content Include="Views\EditorTemplates\Parts.ShadowCulture.Settings.cshtml" />
-    <Content Include="Views\NotTranslated.cshtml" />
-    <Content Include="Views\Parts\InlineListCookieCulturePicker.cshtml" />
-    <Content Include="Views\Web.config" />
-    <Content Include="Views\LocalizedTags\Index.cshtml" />
-    <Content Include="Views\LocalizedTags\Search.cshtml" />
-    <Content Include="Views\Parts\LocalizedTagCloud.cshtml" />
-    <Content Include="Views\Parts\RMLocalization.ContentTranslations.SummaryAdmin.cshtml" />
-    <Content Include="Views\Parts\DropdownCookieCulturePicker.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
