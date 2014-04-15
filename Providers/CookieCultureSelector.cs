@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Web;
-using Orchard;
+using Orchard.Caching;
 using Orchard.Environment.Extensions;
 using Orchard.Localization.Services;
-using System.Globalization;
 using RM.Localization.Services;
-using Orchard.Localization.Records;
-using Orchard.Data;
 
 namespace RM.Localization.Providers
 {
@@ -17,12 +12,19 @@ namespace RM.Localization.Providers
     public class CookieCultureSelector : ICultureSelector
     {
         private readonly ICookieCultureService _cookieCultureService;
-        private readonly IRepository<CultureRecord> _cultureRepository;
+        private readonly Lazy<ICultureManager> _lazyCultureManager;
+        private readonly ICacheManager _cacheManager;
+        private readonly ISignals _signals;
 
-        public CookieCultureSelector(ICookieCultureService cookieCultureService, IRepository<CultureRecord> cultureRepository)
+        public CookieCultureSelector(ICookieCultureService cookieCultureService,
+            Lazy<ICultureManager> lazyCultureManager,
+            ICacheManager cacheManager,
+            ISignals signals)
         {
             _cookieCultureService = cookieCultureService;
-            _cultureRepository = cultureRepository;
+            _lazyCultureManager = lazyCultureManager;
+            _cacheManager = cacheManager;
+            _signals = signals;
         }
 
         public CultureSelectorResult GetCulture(HttpContextBase context) {
@@ -35,10 +37,12 @@ namespace RM.Localization.Providers
             return cultureName == null ? null : new CultureSelectorResult { Priority = 0, CultureName = cultureName };
         }
 
-        private IEnumerable<string> ListCultures()
-        {
-            var query = from culture in _cultureRepository.Table select culture.Culture;
-            return query.ToList();
+        public IEnumerable<string> ListCultures() {
+            return _cacheManager.Get("ListCultures", ctx => {
+                ctx.Monitor(_signals.When("culturesChanged"));
+
+                return _lazyCultureManager.Value.ListCultures();
+            });
         }
     }
 }

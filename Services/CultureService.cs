@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using Orchard;
+using Orchard.Caching;
 using Orchard.ContentManagement;
 using Orchard.Environment.Extensions;
 using Orchard.Localization.Models;
@@ -18,19 +19,45 @@ namespace RM.Localization.Services
         private readonly ICultureManager _cultureManager;
         //private readonly IWorkContextAccessor _workContextAccessor;
         private readonly ILocalizationService _localizationService;
+        private readonly ICacheManager _cacheManager;
+        private readonly ISignals _signals;
         private readonly IOrchardServices _orchardServices;
 
-        public CultureService(IWorkContextAccessor workContextAccessor, IOrchardServices orchardServices, ICultureManager cultureManager, ILocalizationService localizationService)
+        public CultureService(IWorkContextAccessor workContextAccessor, 
+            IOrchardServices orchardServices, 
+            ICultureManager cultureManager,
+            ILocalizationService localizationService,
+            ICacheManager cacheManager,
+            ISignals signals)
         {
             _orchardServices = orchardServices;
             _cultureManager = cultureManager;
             //_workContextAccessor = workContextAccessor;
             _localizationService = localizationService;
+            _cacheManager = cacheManager;
+            _signals = signals;
         }
 
         public IEnumerable<CultureItemModel> ListCultures()
         {
-            return _cultureManager.ListCultures().Select(x => new CultureInfo(x)).Select(x => new CultureItemModel { Culture = x.Name, LocalizedName = x.NativeName, ShortName = x.TwoLetterISOLanguageName, FullName = x.DisplayName });
+            return GetCultures()
+                .Select(x => 
+                    new CultureInfo(x))
+                .Select(x => 
+                    new CultureItemModel {
+                        Culture = x.Name, 
+                        LocalizedName = x.NativeName, 
+                        ShortName = x.TwoLetterISOLanguageName, 
+                        FullName = x.DisplayName
+                    });
+        }
+
+        public IEnumerable<string> GetCultures() {
+            return _cacheManager.Get("ListCultures", ctx => {
+                ctx.Monitor(_signals.When("culturesChanged"));
+
+                return _cultureManager.ListCultures();
+            });
         }
 
         public string GetCurrentCulture()

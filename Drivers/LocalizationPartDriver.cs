@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
+using Orchard.Caching;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Drivers;
 using Orchard.Localization.Models;
-using Orchard.Localization.Services;
 using Orchard.Localization.ViewModels;
 using RM.Localization.Services;
 
@@ -16,8 +16,7 @@ namespace RM.Localization.Drivers
         private const string TemplatePrefix = "Localization";
         private readonly ICultureService _cultureService;
 
-        public LocalizationPartDriver(ICultureService cultureService) 
-        {
+        public LocalizationPartDriver(ICultureService cultureService) {
             _cultureService = cultureService;
         }
 
@@ -26,11 +25,21 @@ namespace RM.Localization.Drivers
             var siteCulture = _cultureService.GetSiteCulture();
             var selectedCulture = part.Culture != null ? part.Culture.Culture : (part.Id == 0 ? siteCulture : null);
             return ContentShape("Parts_RMLocalization_ContentTranslations_SummaryAdmin",
-                             () => shapeHelper.Parts_RMLocalization_ContentTranslations_SummaryAdmin(MasterId: part.MasterContentItem != null ? part.MasterContentItem.Id : part.Id,
-                                                                                                     MasterContentItem: part.MasterContentItem,
-                                                                                                     ShowAddTranslation: _cultureService.ListCultures().Select(c => c.Culture).Where(s => s != siteCulture && !localizations.Select(l => l.Culture.Culture).Contains(s)).Any(),
-                                                                                                     SelectedCulture: selectedCulture,
-                                                                                                     Localizations: localizations.Where(c => c.Culture.Culture != selectedCulture)));
+                             () => {
+                                 var showAddTranslations = _cultureService
+                                     .ListCultures()
+                                     .Select(c => c.Culture)
+                                     .Any(s => 
+                                         s != siteCulture && 
+                                         !localizations.Select(l => l.Culture.Culture).Contains(s));
+
+                                 return shapeHelper.Parts_RMLocalization_ContentTranslations_SummaryAdmin(
+                                     MasterId: part.MasterContentItem != null ? part.MasterContentItem.Id : part.Id,
+                                     MasterContentItem: part.MasterContentItem,
+                                     ShowAddTranslation: showAddTranslations,
+                                     SelectedCulture: selectedCulture,
+                                     Localizations: localizations.Where(c => c.Culture.Culture != selectedCulture));
+                             });
         }
 
         protected override DriverResult Editor(LocalizationPart part, dynamic shapeHelper) {

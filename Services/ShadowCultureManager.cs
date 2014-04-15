@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using Orchard;
 using Orchard.ContentManagement;
@@ -26,7 +25,11 @@ namespace RM.Localization.Services
                                      ISignals signals, 
                                      IWorkContextAccessor workContextAccessor) {
             _workContextAccessor = workContextAccessor;
-            _underlyingCultureManager = new DefaultCultureManager(cultureRepository, cultureSelectors, signals, workContextAccessor);
+            _underlyingCultureManager = new DefaultCultureManager(
+                cultureRepository, 
+                cultureSelectors, 
+                signals, 
+                workContextAccessor);
         }
 
         public IEnumerable<string> ListCultures() {
